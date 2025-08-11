@@ -1,6 +1,11 @@
 import Image from "next/image";
+import MyButton from "./parent1";
 
 export default function Home() {
+  const buttonText = "test"
+  const onClickButton = () => {
+    console.log("test1")
+  }
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -67,6 +72,10 @@ export default function Home() {
           />
           Learn
         </a>
+        <p>テストテスト</p>
+        <MyButton />
+          
+
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
