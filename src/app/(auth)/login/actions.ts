@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/server'
 export async function login() {
   console.log("google login")
   //googleログイン
+  // 非同期で
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
   provider: "google",
@@ -19,6 +20,16 @@ export async function login() {
 if (data.url) {
   redirect(data.url) // use the redirect API for your server framework
 }
+}
+
+export async function logout() {
+  const supabase = await createClient()
+  let { error } = await supabase.auth.signOut()
+
+  if(error) {
+    console.error(error)
+  }
+
 }
 
 // export async function signup(formData: FormData) {
@@ -40,3 +51,4 @@ if (data.url) {
 //   revalidatePath('/', 'layout')
 //   redirect('/')
 // }
+
