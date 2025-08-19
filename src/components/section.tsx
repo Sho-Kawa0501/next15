@@ -10,7 +10,7 @@ interface SectionProps {
 export const Section = ({children, title}: SectionProps) => {
   return (
     <section>
-      <div className="flex items-center justify-between py-0.5">
+      <div className="flex items-center justify-between py-03">
         <h2 className="text-2xl font-bold">{title}</h2>
         <TextToggleButton />
       </div>

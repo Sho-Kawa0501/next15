@@ -3,14 +3,16 @@ import Image from "next/image";
 import { Section } from "@/components/section";
 import CarouselContainer from "@/components/carousel-container";
 import RestrantCard from "@/components/restrant-card";
+import { fetchRamenRestaurants } from "@/lib/restaurants/api";
 
 
 
-export default function Home() {
+export default async function Home() {
   const buttonText = "test"
   const onClickButton = () => {
     console.log("test1")
   }
+  await fetchRamenRestaurants()
   return (
     <Section title="近くのお店">
       <CarouselContainer slideToShow={4}>
