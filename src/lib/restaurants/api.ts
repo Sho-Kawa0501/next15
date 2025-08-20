@@ -1,3 +1,7 @@
+import { GooglePlacesSearchApiResponse } from "@/types"
+import { transformPlaceResults } from "./utils"
+import { PlaceSearchResult } from "@/types"
+
 export async function fetchRamenRestaurants() {
   const url = "https://places.googleapis.com/v1/places:searchNearby"
 
@@ -9,30 +13,51 @@ export async function fetchRamenRestaurants() {
     "places.id,places.displayName,places.primaryType,places.photos",
   }
 
-const requestBody = {
-  "includedPrimaryTypes": ["ramen_restaurant"],
-  "maxResultCount": 10,
-  "locationRestriction": {
-    "circle": {
-      "center": {
-        "latitude": 35.6669248,
-        "longitude": 139.6514163},
-      "radius": 500.0,
-      
-    }
-  },
-  languageCode: "ja",
-  "rankPreference": "DISTANCE"
+  const requestBody = {
+    "includedPrimaryTypes": ["ramen_restaurant"],
+    "maxResultCount": 10,
+    "locationRestriction": {
+      "circle": {
+        "center": {
+          "latitude": 35.6669248,
+          "longitude": 139.6514163},
+        "radius": 500.0,
+        
+      }
+    },
+    languageCode: "ja",
+    "rankPreference": "DISTANCE"
+  }
+
+  const response = await fetch(url, {
+    method:"POST",
+    body:JSON.stringify(requestBody),
+    headers: header,
+    next: {revalidate: 86400 }, //キャッシュからデータ取得
+  })
+
+  if(!response.ok) {
+    const errorData = await response.json()
+    console.error(errorData)
+    return {error: `NearBySearch Error:${response.status}`}
+  }
+
+  const data:GooglePlacesSearchApiResponse = await response.json()
+  // console.log(data)
+  if(!data.places) {
+    return { data:[] }
+  }
+
+  // レスポンスの型を整形するための関数？
+  const nearbyRamenPlaces = data.places
+
+
+  const RamenRestaurants = await transformPlaceResults(nearbyRamenPlaces);
+
 }
 
-const response = await fetch(url, {
-  method:"POST",
-  body:JSON.stringify(requestBody),
-  headers: header,
-  next: {revalidate: 86400 }, //キャッシュからデータ取得
-})
-
-const data = await response.json()
-// console.log(data)
-}
-
+export async function getPhotoUrl(name:string, maxWidth = 400) {
+    const apiKey = process.env.GOOGLE_API_KEY
+    const url = `https://places.googleapis.com/v1/${name}/media?key=${apiKey}&maxWidthPx=${maxWidth}`
+return url;
+  }
