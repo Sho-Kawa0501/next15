@@ -23,10 +23,11 @@ import {
 } from "@/components/ui/command"
 import { Address, AddressResponse, AddressSuggestion } from '@/types'
 import { useDebouncedCallback } from 'use-debounce';
-import { AlertCircle, LoaderCircle, MapPin } from 'lucide-react';
-import { selectAddressAction, selectSuggestionAction } from '@/app/(private)/actions/addressActions';
+import { AlertCircle, LoaderCircle, MapPin, Trash2 } from 'lucide-react';
+import { deleteAddressAction, selectAddressAction, selectSuggestionAction } from '@/app/(private)/actions/addressActions';
 import useSWR from "swr"
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 const AddressModal = () => {
   const [inputText, setInputText] = useState("")
@@ -121,6 +122,19 @@ const AddressModal = () => {
       }
     }
 
+    const handleDeleteAddress = async (addressId: number) => {
+      console.log()
+      const ok = window.confirm("この住所を削除しますか？")
+      if(!ok) return
+      try{
+        await deleteAddressAction(addressId)
+        mutate()
+        setOpen(false)
+      } catch(error) {
+        alert("delete予期せぬエラーが発生しました")
+      }
+    }
+
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger>
@@ -181,11 +195,23 @@ const AddressModal = () => {
                   <CommandItem 
                     onSelect={() => handleSelectAddress(address)}
                     key={address.id}
-                    className={cn("p-5", address.id === data?.selectedAddress.id && "bg-muted")}>
+                    className={cn("p-5 justify-between items-center", address.id === data?.selectedAddress?.id && "bg-muted")}>
                     <div>
                       <p className="font-bold">{address.name}</p>
                       <p>{address.address_text}</p>
                     </div>
+
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteAddress(address.id);
+                      }}
+                      size={"icon"}
+                      variant={"ghost"}
+                    >
+                      <Trash2 />
+                    </Button>
+                     
                   </CommandItem>
                 ))}
                 

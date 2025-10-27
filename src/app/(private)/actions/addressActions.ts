@@ -75,3 +75,26 @@ export async function selectAddressAction(addressId: number) {
     throw new Error("選択中の住所の更新に失敗しました。");
   }
 }
+
+export async function deleteAddressAction(addressId: number) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const { error: deleteError } = await supabase
+    .from("addresses")
+    .delete()
+    .eq("id", addressId)
+    .eq("user_id", user.id);
+
+  if (deleteError) {
+    console.error("住所の削除に失敗しました。", deleteError);
+    throw new Error("住所の削除に失敗しました。");
+  }
+}
