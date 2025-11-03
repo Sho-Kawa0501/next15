@@ -14,9 +14,7 @@ const RestaurantPage = async ({params, searchParams}: {
 }) => {
   const { restaurantId } = await params
   const { sessionToken, searchMenu } = await searchParams
-  console.log("searchMenu", searchMenu)
-  console.log("restaurantId", restaurantId)
-  console.log("sessionToken", sessionToken)
+
   const {data: restaurant, error} = await getPlaceDetails(
     restaurantId,
     ["displayName","photos","primaryType"],
@@ -27,8 +25,6 @@ const RestaurantPage = async ({params, searchParams}: {
   const {data:categoryMenus, error:menusError} = primaryType 
     ? await fetchCategoryMenus(primaryType, searchMenu) 
     : {data: []}
-
-  console.log("categorys compo", categoryMenus)
 
   if(!restaurant) notFound()
 

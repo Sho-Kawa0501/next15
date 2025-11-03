@@ -73,22 +73,23 @@ const Categories = () => {
       imageUrl: "/images/categories/インド料理.png",
     },
   ];
-
+  // 現在のURLからクエリ文字列を読み取るクライアントコンポーネントフック 
   const searchParams = useSearchParams()
+  // ページ遷移に使用。urlを書き換えて遷移
   const router = useRouter()
   const currentCategory = searchParams.get("category")
 
+  // CategoryコンポーネントのonClickイベントにて選択されたcategoryの値が返ってくる。
   const searchRestaurantOfCategory = (category: string) => {
     const params = new URLSearchParams(searchParams)
+    // 現在のurlと、選択されたカテゴリーを比較
     if(currentCategory === category) {
       router.replace("/")
     } else {
+      // 一致していない場合、urlを書き換える
       params.set("category", category)
       router.replace(`/search?${params}`)
     }
-    
-    
-    
   }
 
   return (

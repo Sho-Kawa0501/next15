@@ -37,6 +37,7 @@ export interface GooglePlacesDetailsApiResponse {
   photos?: PlacePhoto[];
 }
 
+// 
 export interface PlaceDetailsAll {
   location?: { latitude?: number; longitude?: number };
   displayName?: string;

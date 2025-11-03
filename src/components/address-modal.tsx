@@ -40,12 +40,13 @@ const AddressModal = () => {
 
   const router = useRouter()
 
+  // 検索したテキストに沿って住所情報を取得
   const fetchSuggestions = useDebouncedCallback(async (input) => {
     if(!input.trim()) {
       setSuggestions([])
       return
     }
-    console.log("input",input)
+    // ルートハンドラ
     try {
       const response = await fetch(
         `/api/address/autocomplete?input=${input}&sessionToken=${sessionToken}`)
@@ -56,11 +57,9 @@ const AddressModal = () => {
         return
       }
       const data:AddressSuggestion[] = await response.json()
-      console.log("suge", data)
       setSuggestions(data)
     } catch (error) {
       setErrorMessage("予期せぬエラーが発生しました。")
-      console.log("error")
     } finally {
       setIsLoading(false)
     }
@@ -95,7 +94,6 @@ const AddressModal = () => {
     isLoading: loading,
     mutate
   } = useSWR<AddressResponse>(`/api/address`, fetcher)
-  console.log("swr", data)
 
   if (error) {
     console.error(error)
@@ -103,8 +101,8 @@ const AddressModal = () => {
   }
   if (loading) return <div></div>
 
+  // 検索した住所押下時
   const handleSelectSuggestion = async (suggestions: AddressSuggestion) => {
-
     try {
       await selectSuggestionAction(suggestions, sessionToken)
       setSessionToken(uuidv4())
@@ -115,6 +113,7 @@ const AddressModal = () => {
       alert("予期せぬエラー発生")
     }
   }
+
 
   const handleSelectAddress = async (address: Address) => {
     try{
@@ -127,12 +126,13 @@ const AddressModal = () => {
     }
   }
 
+  // 保存済みの住所を削除
   const handleDeleteAddress = async (addressId: number) => {
-    console.log()
     const ok = window.confirm("この住所を削除しますか？")
     if(!ok) return
     try{
       const selectedAddressId = data?.selectedAddress?.id
+      // ServerActionsを使用
       await deleteAddressAction(addressId)
       mutate()
       if(selectedAddressId === addressId) {
@@ -159,35 +159,34 @@ const AddressModal = () => {
 
         <Command shouldFilter={false}>
           <div className="bg-muted mb-4">
-          <CommandInput
-            value={inputText}
-            onValueChange={setInputText}
-            placeholder="Type a command or search..." />
+            <CommandInput
+              value={inputText}
+              onValueChange={setInputText}
+              placeholder="Type a command or search..." />
           </div>
         
           <CommandList>
             {inputText ? (
               <>
-                
-              <CommandEmpty>
-              <div className="flex items-center justify-center">
-                {isLoading ? (
-                  <LoaderCircle className="animate-spin" />
-                 ) : errorMessage ? (
-                  <div className="flex items-center text-destructive gap-2">
-                    <AlertCircle />
-                    {errorMessage}
+                <CommandEmpty>
+                  <div className="flex items-center justify-center">
+                    {isLoading ? (
+                      <LoaderCircle className="animate-spin" />
+                    ) : errorMessage ? (
+                      <div className="flex items-center text-destructive gap-2">
+                        <AlertCircle />
+                        {errorMessage}
+                      </div>
+                    ) : (
+                      "住所が見つかりません"
+                    )}
                   </div>
-                 ) : (
-                  "住所が見つかりません"
-                 )}
-              </div>
-            </CommandEmpty>
+                </CommandEmpty>
 
                 {suggestions.map((suggestion) => (
                   <CommandItem 
                     onSelect={() => handleSelectSuggestion(suggestion)}
-                    key={suggestion.placeId} 
+                    key={suggestion.placeId}
                     className="p5">
                     <MapPin />
                     <div>

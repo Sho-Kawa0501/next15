@@ -9,22 +9,21 @@ import RestaurantList from "@/components/restaurant-list";
 import Categories from "@/components/categories";
 
 export default async function Home() {
+  // 
   const { lat, lng } = await fetchLocation()
-  console.log("lat", lat)
-  console.log("lng", lng)
-  const buttonText = "test"
-  const onClickButton = () => {
-    console.log("test1")
-  }
-
+  // const onClickButton = () => {
+    
+  // }
+  // 住所付近のレストラン情報取得
   const {data:nearybyRestaurants, error: nearybyRestaurantsError } = await fetchRestaurants(lat, lng)
+  // 住所付近のラーメン店情報取得
   const {data:nearybyRamenRestaurants, error:nearybyRamenRestaurantsError } = await fetchRamenRestaurants(lat, lng)
   return (
     <>
       <Categories />
       {!nearybyRestaurants ? (
         <p>{nearybyRestaurantsError}</p>
-      ): nearybyRestaurants.length > 0 ?(
+      ): nearybyRestaurants.length > 0 ? (
         <Section title="近くのお店" expandedContent={<RestaurantList restaurants={nearybyRestaurants} />}>
           <CarouselContainer slideToShow={4}>
             {nearybyRestaurants.map((restaurant, index) => (
@@ -49,7 +48,6 @@ export default async function Home() {
       ) : (
         <p>近くにラーメン店がありません</p>
       )}
-    
     </>
   );
 }

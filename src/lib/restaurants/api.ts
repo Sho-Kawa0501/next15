@@ -49,37 +49,33 @@ export async function fetchRestaurants(lat: number, lng: number) {
     languageCode: "ja",
     "rankPreference": "DISTANCE"
   }
+
+  // GMPAPI呼び出し 
   const response = await fetch(url, {
-      method:"POST",
-      body:JSON.stringify(requestBody),
-      headers: header,
-      next: {revalidate: 86400 }, //キャッシュからデータ取得
-    })
+    method:"POST",
+    body:JSON.stringify(requestBody),
+    headers: header,
+    next: {revalidate: 86400 }, //キャッシュからデータ取得
+  })
 
-    if(!response.ok) {
-      const errorData = await response.json()
-      console.error(errorData)
-      return {error: `NearBySearch Error:${response.status}`}
-    }
+  if(!response.ok) {
+    const errorData = await response.json()
+    console.error(errorData)
+    return {error: `NearBySearch Error:${response.status}`}
+  }
 
-    const data:GooglePlacesSearchApiResponse = await response.json()
-    // console.log(data)
-    if(!data.places) {
-      return { data:[] }
-    }
+  const data:GooglePlacesSearchApiResponse = await response.json()
+  if(!data.places) {
+    return { data:[] }
+  }
 
-    // レスポンスの型を整形するための関数？
-    const nearbyPlaces = data.places
-    const machingPlaces = nearbyPlaces.filter((place) => place.primaryType && desiredTypes.includes(place.primaryType))
+  // レスポンスの型を整形するための関数？
+  const nearbyPlaces = data.places
+  const machingPlaces = nearbyPlaces.filter((place) => place.primaryType && desiredTypes.includes(place.primaryType))
 
-    console.log("nearbyPlaces", nearbyPlaces)
-    console.log("mPlaces", machingPlaces)
-
-    //整形関数
-    const restaurants = await transformPlaceResults(machingPlaces);
-    console.log("restrants"+JSON.stringify(restaurants))
-    return {data: restaurants}
-
+  //整形関数
+  const restaurants = await transformPlaceResults(machingPlaces);
+  return {data: restaurants}
 }
 
 // 近くのラーメン店取得
@@ -252,6 +248,7 @@ export async function fetchRestaurantsByKeyword(query: string, lat: number, lng:
 
 }
 
+
 export async function getPhotoUrl(name:string, maxWidth = 400) {
   "use cache"
     const apiKey = process.env.GOOGLE_API_KEY
@@ -259,6 +256,7 @@ export async function getPhotoUrl(name:string, maxWidth = 400) {
     return url;
   }
 
+// GMPAPIよりレストラン情報を取得
 export const getPlaceDetails = async (
   placeId: string,
   fields: string[],
@@ -295,7 +293,6 @@ export const getPlaceDetails = async (
   }
 
   const data: GooglePlacesDetailsApiResponse = await response.json()
-  console.log("pdd", data)
 
   const results:PlaceDetailsAll = {}
 
@@ -320,6 +317,7 @@ export const getPlaceDetails = async (
   return {data: results}
 }
 
+// ユーザーが選択している住所の座標または固定の座標を返す
 export async function fetchLocation() {
   const DEFAULT_LOCATION = { lat: 35.6580382, lng: 139.6990609 };
 
@@ -354,6 +352,3 @@ export async function fetchLocation() {
 
     return {lat, lng}
 }
-
-
-          

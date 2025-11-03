@@ -65,14 +65,12 @@ export async function GET(request: NextRequest) {
     return {
       placeId: suggestion.placePrediction?.placeId,
       placeName: suggestion.placePrediction?.structuredFormat?.mainText?.text,
-       address_text: suggestion.placePrediction?.structuredFormat?.secondaryText?.text
+      address_text: suggestion.placePrediction?.structuredFormat?.secondaryText?.text
     }
   }).filter((suggestion): suggestion is AddressSuggestion => 
     !!suggestion.placeId && 
     !!suggestion.placeName && 
     !!suggestion.address_text)
-
-  console.log("address sug", results)
 
   return NextResponse.json(results)
   } catch(error) {
