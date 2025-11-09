@@ -8,6 +8,7 @@ import CarouselContainer from './carousel-container'
 import MenuCard from './menu-card'
 import FlatMenuCard from './flat-menu-card'
 import { InView } from "react-intersection-observer";
+import MenuModal from './menu-modal'
 
 interface MenuContentProps {
   categoryMenus: CategoryMenu[]
@@ -65,6 +66,8 @@ const MenuContent = ({categoryMenus}: MenuContentProps) => {
         ))}
         MenuContent
       </div>
+
+      <MenuModal />
       
     </div>
   )
