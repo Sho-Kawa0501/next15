@@ -6,7 +6,7 @@ interface ModalContextType {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
   openModal: (menu: Menu) => void
-  closeModal: (menu: Menu) => void
+  closeModal: () => void
   selectedItem: Menu | null
 }
 
@@ -23,9 +23,9 @@ export const ModalProvider = ({children} : {children: ReactNode}) => {
   }
 
   // モーダル非表示
-  const closeModal = (menu: Menu) => {
+  const closeModal = () => {
     setIsOpen(false)
-    setSelectedItem(null)
+    setTimeout(() => setSelectedItem(null), 200)
   }
 
   return (

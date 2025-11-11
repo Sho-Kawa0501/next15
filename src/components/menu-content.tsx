@@ -7,14 +7,15 @@ import { Section } from './section'
 import CarouselContainer from './carousel-container'
 import MenuCard from './menu-card'
 import FlatMenuCard from './flat-menu-card'
-import { InView } from "react-intersection-observer";
+import { InView } from "react-intersection-observer"
 import MenuModal from './menu-modal'
 import { useModal } from '@/app/context/modalContext'
 
 interface MenuContentProps {
   categoryMenus: CategoryMenu[]
+  restaurantId: string
 }
-const MenuContent = ({categoryMenus}: MenuContentProps) => {
+const MenuContent = ({categoryMenus, restaurantId}: MenuContentProps) => {
   const {isOpen, setIsOpen, openModal, closeModal, selectedItem} = useModal()
   const [activeCategoryId, setActiveCategoryId] = useState(categoryMenus[0].id)
   const handleSelectCategory = (categoryId: string) => {
@@ -69,7 +70,12 @@ const MenuContent = ({categoryMenus}: MenuContentProps) => {
         MenuContent
       </div>
 
-      <MenuModal isOpen={isOpen} closeModal={closeModal} />
+      <MenuModal 
+        isOpen={isOpen} 
+        closeModal={closeModal}
+        selectedItem={selectedItem}
+        restaurantId={restaurantId}
+        />
       
     </div>
   )

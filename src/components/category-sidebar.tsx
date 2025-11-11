@@ -22,7 +22,7 @@ const CategorySidebar = ({
       <nav>
         <ul>
           {categoryMenus.map((category) => (
-            <li>
+            <li key={category.id}>
               <button 
                 onClick={() => onSelectCategory(category.id)}
                 type="button"

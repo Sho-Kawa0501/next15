@@ -4,6 +4,7 @@ import MenuSheet from './menu-sheet'
 import PlaceSearchBar from './place-search-bar'
 import AddressModal from './address-modal'
 import { fetchLocation } from '@/lib/restaurants/api'
+import Cart from './cart'
 
 
 const Header = async () => {
@@ -20,7 +21,7 @@ const Header = async () => {
         <div className="flex-1 bg-yellow-200">
           <PlaceSearchBar lat={lat} lng={lng}/>
         </div>
-        <div>カート</div> 
+        <Cart />
       </div>
     </header>
     

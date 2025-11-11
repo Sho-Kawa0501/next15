@@ -81,6 +81,7 @@ export async function GET(request: NextRequest) {
   }).filter((suggestion): suggestion is RestaurantSuggestion => suggestion !== undefined)
   return NextResponse.json(results)
   } catch(error) {
-    return {error: "予期せぬエラー。"}
+    console.error(error)
+    return NextResponse.json({error: "予期せぬエラーが発生しました"})
   }
 }
