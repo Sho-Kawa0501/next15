@@ -10,7 +10,7 @@ import MenuSeachBar from '@/components/menu-search-bar';
 
 const RestaurantPage = async ({params, searchParams}: {
   params: Promise<{ restaurantId: string}>
-  searchParams: Promise<{sessionToken: string, searchMenu: string} >
+  searchParams: Promise<{sessionToken: string, searchMenu: string}>
 }) => {
   const { restaurantId } = await params
   const { sessionToken, searchMenu } = await searchParams

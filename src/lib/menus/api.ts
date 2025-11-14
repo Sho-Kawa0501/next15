@@ -22,8 +22,6 @@ export async function fetchCategoryMenus(primaryType: string, searchQuery?:strin
     return {error:"メニューの取得に失敗しました"}
   }
 
-  console.log("mmeennuu",menus)
-
   if(menus.length === 0) {
     return {data:[]}
   }
@@ -53,7 +51,6 @@ export async function fetchCategoryMenus(primaryType: string, searchQuery?:strin
 
   // 取得したメニュー情報のカテゴリー情報一覧を取得する。Array.from(new Set)で重複値を排除 
   const categories = Array.from(new Set(menus.map((menu) => menu.category)))
-  console.log("categoryes", categories)
 
   for (const category of categories) {
     const items = menus 

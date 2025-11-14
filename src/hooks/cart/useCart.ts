@@ -1,3 +1,4 @@
+import { Cart } from "@/types"
 import useSWR from "swr"
 
 const fetcher = async (url: string) => {
@@ -11,13 +12,19 @@ const fetcher = async (url: string) => {
     return data
   }
 
-export function useCart() {
+export function useCart(restaurantId?: string, enabled = true) {
   const { 
     data: carts,
     error: cartsError,
     isLoading,
     mutate: mutateCart
-  } = useSWR(`/api/cart`, fetcher)
+  } = useSWR<Cart[]>(`/api/cart`, fetcher, {
+    isPaused: () => !enabled
+  })
 
-  return {carts, cartsError, isLoading, mutateCart}
+  const targetCart = restaurantId 
+    ? carts?.find((cart) => cart.restaurant_id === restaurantId) ?? null 
+    : null
+  // console.log("targetCart",targetCart)
+  return {carts, cartsError, isLoading, mutateCart, targetCart}
 }

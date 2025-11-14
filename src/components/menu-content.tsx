@@ -10,6 +10,8 @@ import FlatMenuCard from './flat-menu-card'
 import { InView } from "react-intersection-observer"
 import MenuModal from './menu-modal'
 import { useModal } from '@/app/context/modalContext'
+import { useCartVisibility } from '@/app/context/cartContext'
+import { useCart } from '@/hooks/cart/useCart'
 
 interface MenuContentProps {
   categoryMenus: CategoryMenu[]
@@ -17,10 +19,11 @@ interface MenuContentProps {
 }
 const MenuContent = ({categoryMenus, restaurantId}: MenuContentProps) => {
   const {isOpen, setIsOpen, openModal, closeModal, selectedItem} = useModal()
+  const { targetCart, mutateCart } = useCart(restaurantId, false)
+  const { openCart } = useCartVisibility()
   const [activeCategoryId, setActiveCategoryId] = useState(categoryMenus[0].id)
   const handleSelectCategory = (categoryId: string) => {
     const element = document.getElementById(`${categoryId}-menu`)
-    console.log("element", element)
 
     if(element) {
       element.scrollIntoView({ behavior: "smooth"})
@@ -75,6 +78,9 @@ const MenuContent = ({categoryMenus, restaurantId}: MenuContentProps) => {
         closeModal={closeModal}
         selectedItem={selectedItem}
         restaurantId={restaurantId}
+        openCart={openCart}
+        targetCart={targetCart}
+        mutateCart={mutateCart}
         />
       
     </div>

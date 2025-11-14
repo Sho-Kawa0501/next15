@@ -120,7 +120,6 @@ export async function fetchRamenRestaurants(lat: number, lng: number) {
   }
 
   const data:GooglePlacesSearchApiResponse = await response.json()
-  // console.log(data)
   if(!data.places) {
     return { data:[] }
   }
@@ -176,7 +175,6 @@ export async function fetchCategoryRestaurants(category: string, lat: number, ln
   }
 
   const data:GooglePlacesSearchApiResponse = await response.json()
-  // console.log(data)
   if(!data.places) {
     return { data:[] }
   }
@@ -233,7 +231,7 @@ export async function fetchRestaurantsByKeyword(query: string, lat: number, lng:
   }
 
   const data:GooglePlacesSearchApiResponse = await response.json()
-  // console.log(data)
+
   if(!data.places) {
     return { data:[] }
   }
@@ -260,7 +258,7 @@ export async function getPhotoUrl(name:string, maxWidth = 400) {
 export const getPlaceDetails = async (
   placeId: string,
   fields: string[],
-  sessionToken:string
+  sessionToken?:string
 ) => {
 
   const fieldsParam = fields.join(",")

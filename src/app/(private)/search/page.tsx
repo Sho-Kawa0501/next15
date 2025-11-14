@@ -11,8 +11,6 @@ const SearchPage = async ({searchParams,}: {
   }>
 }) => {
   const {category, restaurant} = await searchParams
-  console.log("restaurant", restaurant)
-
   const {lat, lng} = await fetchLocation()
   
   if(category) {
@@ -34,8 +32,7 @@ const SearchPage = async ({searchParams,}: {
     
     const {data: restaurants, error: fetchError} = 
     await fetchRestaurantsByKeyword(restaurant, lat, lng)
-    console.log("text_search_results", restaurants);
-     return (
+      return (
     <>
       {!restaurants ? (
         <p>{fetchError}</p>

@@ -58,7 +58,6 @@ export async function GET(request: NextRequest) {
     )
   }
   const data:GooglePlacesAutocompleteApiResponse = await response.json()
-  console.log(JSON.stringify(data, null, 2))
 
   const suggestions = data.suggestions ?? []
 
@@ -82,6 +81,6 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(results)
   } catch(error) {
     console.error(error)
-    return NextResponse.json({error: "予期せぬエラーが発生しました"})
+    return NextResponse.json({error: "予期せぬエラーが発生しました"}, {status: 500})
   }
 }

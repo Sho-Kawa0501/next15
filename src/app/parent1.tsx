@@ -15,10 +15,6 @@ const MyButton = (props) => {
     setCount(count + 1) 
     // setCount(count + 1) 
     setCountArr((prev) => [...prev, count])
-    // setCount((prev) => prev + 1)
-    // setCount((prev) => prev + 1)
-    console.log(count)
-    console.log(JSON.stringify((countArr)))
   }
   // countに変更があったときにコールバック関数がよばれる
   useEffect(() => {

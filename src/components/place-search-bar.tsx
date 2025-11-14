@@ -46,7 +46,6 @@ export const PlaceSearchBar = ({lat, lng}: PlaceSearchBarProps) => {
         return
       }
       const data:RestaurantSuggestion[] = await response.json()
-      console.log("fetchSuggestions",data)
       setSuggestions(data)
     } catch (error) {
       setErrorMessage("予期せぬエラーが発生しました。")

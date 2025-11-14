@@ -14,6 +14,5 @@ export async function transformPlaceResults(restaurants:PlaceSearchResult[]){
     }))
 
     const data = await Promise.all(promises)
-    console.log(JSON.stringify((data)))
     return data
 }

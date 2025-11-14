@@ -10,29 +10,85 @@ import {
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Menu } from "@/types";
-import { useState } from "react";
+import { Cart, CartItem, Menu } from "@/types";
+import { useEffect, useState } from "react";
 import { addToCartAction } from "@/app/(private)/actions/cartActions";
+import { KeyedMutator } from "swr";
 
 interface MenuModalProps {
   isOpen: boolean
   closeModal: () => void
   selectedItem: Menu | null
   restaurantId: string
+  openCart: () => void
+  targetCart: Cart | null
+  mutateCart: KeyedMutator<Cart[]>
 }
 
 export default function MenuModal({
   isOpen, 
   closeModal, 
   selectedItem,
-  restaurantId
+  restaurantId,
+  openCart,
+  targetCart,
+  mutateCart
 }: MenuModalProps) {
   const [quantity, setQuantity] = useState(1)
+  const existingCartItem = targetCart
+    ? targetCart?.cart_items.find((item) => item.menus.id === selectedItem?.id) ?? null
+    : null
+
+  useEffect(() => {
+    if(!selectedItem) return
+    setQuantity(existingCartItem?.quantity ?? 1)
+  }, [selectedItem, existingCartItem])
+
   const handleAddToCart = async () => {
     if(!selectedItem) return
     try {
       // ServerActions呼び出し
-      await addToCartAction(selectedItem, quantity, restaurantId)
+      const response = await addToCartAction(
+        selectedItem,
+        quantity,
+        restaurantId
+      )
+      mutateCart((prevCarts: Cart[] | undefined) => {
+        if(!prevCarts) return
+        if(response.type === "new") {
+          const { cart } = response
+          // カート新規作成処理
+          return [...prevCarts, cart]
+        }
+
+        if(!targetCart) return
+        const cart = { ...targetCart}
+        if(existingCartItem) {
+          // 数量更新
+          cart.cart_items = cart.cart_items.map((item) => 
+            item.id === existingCartItem.id
+              ? { ...item, quantity: quantity }
+              : item
+          )
+        } else {
+          // アイテム追加
+          const newCartItem: CartItem = {
+            id:response.id,
+            menus:{
+              id: selectedItem.id,
+              name: selectedItem.name,
+              price: selectedItem.price,
+              photoUrl: selectedItem.photoUrl
+            },
+            quantity: quantity
+          }
+          cart.cart_items = [...cart.cart_items, newCartItem]
+        }
+      
+        return prevCarts.map((c) => (c.id === cart.id ? cart : c))
+      }, false)
+      openCart()
+      closeModal()
     } catch (error) {
       console.error(error)
       alert("エラーが発生しました")
@@ -92,17 +148,15 @@ export default function MenuModal({
                 <option value="5">5</option>
               </select>
             </div>
-
-            <DialogClose asChild>
               <Button
                 onClick={handleAddToCart}
                 type="button"
                 size="lg"
                 className="mt-6 h-14 text-lg font-semibold"
               >
-                商品を追加（￥{selectedItem.price * quantity}）
+                {existingCartItem ? "商品を更新" : "商品を追加"}
+                （￥{selectedItem.price * quantity}）
               </Button>
-            </DialogClose>
           </div>
         </div>
           </>
