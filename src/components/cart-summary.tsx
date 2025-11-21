@@ -100,6 +100,11 @@ const CartSummary = ({restaurantId}: CartSummaryProps) => {
   const handleCheckout = async () => {
     try {
       await checkoutAction(cart.id,fee,service,delivery)
+      mutateCart(
+        (prevCarts) => prevCarts?.filter((c) => c.id !== cart.id),
+        false
+      )
+      push(`/restaurant/${restaurantId}/checkout/complete`)
     } catch (error) {
       console.error(error)
         alert("エラーが発生しました")
