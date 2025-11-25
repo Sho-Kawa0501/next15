@@ -1,0 +1,27 @@
+### HashiCorp Terraform recommended ignores (https://github.com/hashicorp/gitignore)
+# Local .terraform directories
+.terraform/*
+
+# State files
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+
+# Ignore override files, which are local-only
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore any local-sensitive tfvars files
+*.tfvars
+*.tfvars.json
+
+# .terraform.d plugin/cache
+.terraform.d

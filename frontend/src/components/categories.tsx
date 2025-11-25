@@ -96,6 +96,7 @@ const Categories = () => {
     <CarouselContainer slideToShow={10}>
       {categories.map((category) => ( 
         <Category 
+          key={category.type}
           category={category}
           onClick={searchRestaurantOfCategory}
           select={category.type === currentCategory}

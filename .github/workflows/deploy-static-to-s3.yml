@@ -1,0 +1,66 @@
+name: Deploy static files to S3 and invalidate CloudFront
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # public/images/ の同期（Food prep.lottie を含む）
+      - name: Sync /public/images
+        run: |
+          aws s3 sync ./public/images s3://${{ secrets.S3_BUCKET }}/images \
+          --exclude "*" \
+          --include "*.png" \
+          --include "*.jpg" \
+          --include "*.jpeg" \
+          --include "*.svg" \
+          --include "*.webp" \
+          --include "*.lottie" \
+          --acl public-read
+
+      # public/images/categories/ の同期
+      - name: Sync /public/images/categories
+        run: |
+          aws s3 sync ./public/images/categories s3://${{ secrets.S3_BUCKET }}/images/categories \
+          --acl public-read
+
+      # public/
+      - name: Sync root public folder (optional)
+        run: |
+          aws s3 sync ./public s3://${{ secrets.S3_BUCKET }}/ \
+          --exclude "*" \
+          --include "*.png" \
+          --include "*.jpg" \
+          --include "*.jpeg" \
+          --include "*.svg" \
+          --include "*.webp" \
+          --include "*.lottie" \
+          --acl public-read
+
+      # CloudFront Invalidation
+      - name: Invalidate CloudFront cache
+        uses: aws-actions/amazon-cloudfront-invalidate-action@v1
+        with:
+          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          paths: "/*"

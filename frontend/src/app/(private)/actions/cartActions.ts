@@ -125,7 +125,7 @@ export async function addToCartAction(
         }
       }),
       restaurantName: restaurantData?.displayName,
-      photoUrl: restaurantData?.photoUrl
+      photoUrl: restaurantData?.photoUrl ?? ""
     }
     return { type: "new", cart: addCart}
   }
