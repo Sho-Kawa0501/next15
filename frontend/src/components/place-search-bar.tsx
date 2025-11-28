@@ -142,7 +142,6 @@ export const PlaceSearchBar = ({lat, lng}: PlaceSearchBarProps) => {
           </CommandList>
         </div>
       )}
-      
   </Command>
   )
 }

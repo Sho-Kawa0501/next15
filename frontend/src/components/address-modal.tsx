@@ -156,7 +156,6 @@ const AddressModal = () => {
             住所登録と選択
           </DialogDescription>
         </DialogHeader>
-
         <Command shouldFilter={false}>
           <div className="bg-muted mb-4">
             <CommandInput
@@ -164,7 +163,6 @@ const AddressModal = () => {
               onValueChange={setInputText}
               placeholder="Type a command or search..." />
           </div>
-        
           <CommandList>
             {inputText ? (
               <>
@@ -182,7 +180,6 @@ const AddressModal = () => {
                     )}
                   </div>
                 </CommandEmpty>
-
                 {suggestions.map((suggestion) => (
                   <CommandItem 
                     onSelect={() => handleSelectSuggestion(suggestion)}
@@ -219,13 +216,10 @@ const AddressModal = () => {
                     >
                       <Trash2 />
                     </Button>
-                     
                   </CommandItem>
                 ))}
-                
               </>
             )}
-            
           </CommandList>
         </Command>
       </DialogContent>
