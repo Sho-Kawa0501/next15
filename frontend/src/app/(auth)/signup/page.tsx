@@ -1,22 +1,20 @@
 import { AuthForm } from "@/components/auth/auth-form";
-import { login } from "./actions";
+import { signup } from "../login/actions";
 
-interface LoginPageProps {
+interface SignupPageProps {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
+export default async function SignupPage({ searchParams }: SignupPageProps) {
   const sp = (await searchParams) ?? {};
   const error = typeof sp.error === "string" ? sp.error : undefined;
-  const registered = sp.registered === "1";
 
   return (
     <AuthForm
-      title="ログイン"
-      mode="login"
-      action={login}
+      title="新規登録"
+      mode="signup"
+      action={signup}
       error={error}
-      registered={registered}
     />
   );
 }
