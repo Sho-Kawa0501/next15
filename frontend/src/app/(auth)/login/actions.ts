@@ -63,7 +63,13 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { display_name: username } },
+    options: 
+      { 
+        data: { 
+          display_name: username,
+          full_name: username,
+        }
+      },
   });
 
   if (error) {
