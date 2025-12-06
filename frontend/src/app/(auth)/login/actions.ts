@@ -12,10 +12,9 @@ export async function login(formData: FormData) {
   const supabase = await createClient();
   const provider = (formData.get("provider") as string) ?? "";
 
-  // ===== OAuth Login =====
+  // Googleアカウント ログイン
   if (provider === "google") {
     const siteUrl = process.env.NEXT_PUBLIC_APP_URL
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${siteUrl}/auth/callback` },
@@ -30,7 +29,7 @@ export async function login(formData: FormData) {
     redirect("/login");
   }
 
-  // ===== Email Login =====
+  // メールアドレス、パスワード ログイン
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
@@ -51,7 +50,6 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();
-
   const username = String(formData.get("username") ?? "");
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");

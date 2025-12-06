@@ -14,17 +14,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { logout } from "@/app/(auth)/login/actions";
+import UserInfoModal from "./auth/user-info-modal";
 
 export default async function MenuSheet() {
 
 const supabase = await createClient()
+// ユーザーチェック
 const { data: { user } } = await supabase.auth.getUser()
 
 if(!user) {
   redirect("/login")
 }
 
-const {avatar_url, full_name} = user.user_metadata
+// ユーザー情報取得
+const {avatar_url, full_name, display_name, email} = user.user_metadata
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -44,15 +48,15 @@ const {avatar_url, full_name} = user.user_metadata
             <AvatarFallback>ユーザ-名</AvatarFallback>
           </Avatar>
           <div>
-            <div className="font-bold">{full_name}</div>
+            <div className="font-bold">{display_name}</div>
             <div>
-              <Link href={"#"} className="text-green-500 text-xs">
-                アカウントを管理する
-              </Link>
+              <UserInfoModal 
+                userName={display_name}
+                userEmail={email}
+                />
             </div>
           </div>
         </div>
-
         {/* メニューエリア */}
         <ul className="space-y-4">
           <li>
@@ -68,12 +72,10 @@ const {avatar_url, full_name} = user.user_metadata
             </Link>
           </li>
         </ul>
-
         <SheetFooter>
           <form>
             <Button formAction={logout}>ログアウト</Button>
           </form>
-          
         </SheetFooter>
       </SheetContent>
     </Sheet>

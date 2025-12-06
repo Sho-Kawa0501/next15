@@ -25,7 +25,7 @@ export function AuthForm({
           エラー: {error}
         </div>
       )}
-      {/* Google OAuth */}
+      {/* Googleアカウント ログイン */}
       {mode === "login" && (
         <>
           <form action={action} className="grid gap-4">
@@ -35,9 +35,10 @@ export function AuthForm({
           <div className="text-center text-sm text-muted-foreground">または</div>
         </>
       )}
+      {/* メールアドレス&パスワード ログイン */}
       <form action={action} className="grid gap-4">
         {mode === "signup" && (
-          <AuthInput label="ユーザー名" name="username" />
+          <AuthInput label="ユーザー名" name="username" type="text" />
         )}
         <AuthInput label="メールアドレス" name="email" type="email" />
         <AuthInput label="パスワード" name="password" type="password" />
@@ -54,7 +55,7 @@ export function AuthForm({
           </span>
         ) : (
           <span>
-            すでにアカウントをお持ちですか？{" "}
+            すでにアカウントをお持ちですか？
             <Link href="/login" className="underline">
               ログインはこちら
             </Link>

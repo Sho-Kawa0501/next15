@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 
-export async function updateUserInfo() {
+export async function updateUserInfoAction(userName :string) {
   const supabase = await createClient()
   const {data: {user}, error: userError} = await supabase.auth.getUser()
   if (userError || !user) {
@@ -12,10 +12,9 @@ export async function updateUserInfo() {
 
   const { data, error: updateUserError } = await supabase.auth.updateUser({
     data: {
-      full_name: ""
+      full_name: userName,
+      display_name: userName
     },
-    email: 'new@email.com',
-    password: "",
   })
 
   if(updateUserError) {
@@ -24,4 +23,3 @@ export async function updateUserInfo() {
   }
   return data
 }
-

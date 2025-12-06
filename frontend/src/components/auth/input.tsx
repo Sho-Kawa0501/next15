@@ -2,12 +2,11 @@
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Search } from "lucide-react";
 
 interface AuthInputProps {
   label: string;
   name: string;
-  type?: string;
+  type: string;
   placeholder?: string;
   required?: boolean;
 }
@@ -15,7 +14,7 @@ interface AuthInputProps {
 export function AuthInput({
   label,
   name,
-  type = "text",
+  type,
   placeholder,
   required = true,
 }: AuthInputProps) {

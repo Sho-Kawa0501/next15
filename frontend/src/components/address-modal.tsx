@@ -140,7 +140,7 @@ const AddressModal = () => {
       }
       setOpen(false)
     } catch(error) {
-      alert("delete予期せぬエラーが発生しました")
+      alert("予期せぬエラーが発生しました")
     }
   }
 

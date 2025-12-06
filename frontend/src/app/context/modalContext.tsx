@@ -37,8 +37,8 @@ export const ModalProvider = ({children} : {children: ReactNode}) => {
 
 export const useModal = () => {
   const context = useContext(ModalContext)
-   if(!context) {
+  if(!context) {
     throw new Error("useModalはModalProvider内で使用する必要があります。")
-   }
-   return context
+  }
+  return context
 }
