@@ -110,7 +110,7 @@ const AddressModal = () => {
       mutate()
       router.refresh()
     } catch(error) {
-      alert("予期せぬエラー発生")
+      alert("予期せぬエラーが発生しました。")
     }
   }
 

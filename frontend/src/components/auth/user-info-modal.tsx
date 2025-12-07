@@ -1,35 +1,47 @@
 'use client'
 import React, { useState } from 'react'
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from '../ui/input';
 import { updateUserInfoAction } from '@/app/(auth)/actions/userActions';
 import { Button } from '../ui/button';
+import { useForm } from 'react-hook-form';
 
 interface UserInfoModalProps {
-  userName: string
-  userEmail: string
+  userName: string;
 }
 
-const UserInfoModal = ({userName, userEmail}: UserInfoModalProps) => {
+const updateUserNameFormData = z.object({
+  inputUserName: z.string()
+    .min(1, "ユーザー名は必須です")
+    .max(20, "20文字以内で入力してください"),
+})
+
+type UpdateUserNameFormData = z.infer<typeof updateUserNameFormData>
+
+const UserInfoModal = ({userName}: UserInfoModalProps) => {
   const [open, setOpen] = useState(false)
   const [inputUserName, setInputUserName] = useState<string>(userName)
-  // バリデーションチェック
-  // 入力された値をmenu-sheetコンポーネントに渡す
-  // モーダルを開いたらユーザー情報を再取得（mutateを使用？）
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateUserNameFormData>({
+    resolver: zodResolver(updateUserNameFormData)
+  })
 
   const handleUpdateUserInfo = async () => {
-    console.log("inputUserName.userName", inputUserName)
     try {
       await updateUserInfoAction(inputUserName)
       setOpen(false)
     } catch {
-      console.error("")
+      console.error("予期せぬエラーが発生しました。")
     }
   }
 
@@ -39,26 +51,30 @@ const UserInfoModal = ({userName, userEmail}: UserInfoModalProps) => {
         open={open}
         onOpenChange={(open) => setOpen(open)}
       >
-      <DialogTrigger>ユーザー情報を変更する</DialogTrigger>
+      <DialogTrigger>ユーザー名変更</DialogTrigger>
       <DialogContent className="lg:max-w-4xl">
-        <div>UserInfoModal</div>
-        
+        <DialogTitle>
+          ユーザー名変更
+        </DialogTitle>
         <Input
-          // label="ユーザー名" 
-          name="user-name"
           autoComplete="off"
           value={inputUserName}
+          {...register('inputUserName')}
           onChange={(e) => setInputUserName(e.target.value)} />
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleUpdateUserInfo();
-          }}
-          size={"icon"}
-          variant={"ghost"}
-        >
-          送信する
-        </Button>
+          {errors.inputUserName && 
+            <span style={{ color: 'red', fontSize: '0.85rem' }}>
+              {errors.inputUserName.message}
+            </span>
+          }
+        <div className="flex justify-center">
+          <Button
+            onClick={
+              handleSubmit(handleUpdateUserInfo)
+            }
+          >
+            送信する
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
     </>
