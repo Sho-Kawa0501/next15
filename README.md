@@ -63,4 +63,4 @@ TypeScript、React.js、Next.js の学習成果を記録として残すために
 ![Image](https://github.com/user-attachments/assets/d2cd96a6-584e-4c92-ac95-a0df1f5b0936)
 
 ## ER 図
-<img width="983" height="559" alt="Image" src="https://github.com/user-attachments/assets/26310700-b528-4bfb-aa6b-f11be3d957ad" />
+<img width="1066" height="919" alt="Image" src="https://github.com/user-attachments/assets/11772128-2180-44cc-add3-b7b068ee99c3" />
